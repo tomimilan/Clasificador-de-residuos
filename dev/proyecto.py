@@ -28,7 +28,6 @@ import os
 import zipfile
 import shutil
 # Import gdown for downloading files from Google Drive without mounting
-!pip install gdown -q
 import gdown
 
 # 1. Eliminar el montaje de Google Drive y descargar el dataset directamente
@@ -60,23 +59,23 @@ except Exception as e:
     print("Por favor, asegúrate de que el 'drive_file_id' sea correcto y que el archivo sea público.")
 
 # 3. Crear el .gitignore reglamentario
-gitignore_content = """
-data/raw/
-*.zip
-*.jpg
-*.jpeg
-*.png
-__pycache__/
-.ipynb_checkpoints/
+#gitignore_content = """
+#data/raw/
+#*.zip
+#*.jpg
+#*.jpeg
+#*.png
+#__pycache__/
+#.ipynb_checkpoints/
 """
 with open(".gitignore", "w") as f:
     f.write(gitignore_content.strip())
 print("✓ Archivo .gitignore configurado.")
 
-"""Celda 2: Mapeo de Clases GIRSU Mendoza y Creación de Splits Estratificados (CSV)
-
-**Nota del Profesor:** El dataset ya debe estar dividido por contenedores. Esto significa que las subcarpetas dentro de `data/raw/Residuos contenedores/` (o la carpeta raíz después de la descompresión) deben ser directamente los nombres de los contenedores (ej. "VERDE (Secos Reciclables)", "NEGRO (Húmedos / Rechazo)", etc.) y no las categorías individuales como 'cardboard' o 'glass'.
 """
+#Celda 2: Mapeo de Clases GIRSU Mendoza y Creación de Splits Estratificados (CSV)
+
+#**Nota del Profesor:** El dataset ya debe estar dividido por contenedores. Esto significa que las subcarpetas dentro de `data/raw/Residuos contenedores/` (o la carpeta raíz después de la descompresión) deben ser directamente los nombres de los contenedores (ej. "VERDE (Secos Reciclables)", "NEGRO (Húmedos / Rechazo)", etc.) y no las categorías individuales como 'cardboard' o 'glass'.#
 
 import pandas as pd
 import numpy as np
