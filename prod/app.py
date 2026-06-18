@@ -37,7 +37,10 @@ else:
             clase_predicha, probabilidades = predecir(model, tensor_img)
 
         # Mostrar clase ganadora destacada
-        st.success(f"Contenedor Destino Recomendado: {clase_predicha}")
+        if "NEGRO" in clase_predicha:
+            st.warning(f"Contenedor Destino Recomendado: {clase_predicha}")
+        else:
+            st.success(f"Contenedor Destino Recomendado: {clase_predicha}")
 
         # Mostrar las probabilidades en barras
         st.write("Probabilidades por clase:")
