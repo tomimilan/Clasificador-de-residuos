@@ -10,7 +10,7 @@ st.title("♻️ Clasificador de Residuos Urbanos")
 st.write("Proyecto automatizado bajo los lineamientos de la Ley Provincial 5.961 (GIRSU Mendoza).")
 
 #Ruta hacia los pesos ganadores (que están en dev/)
-PATH_PESOS = os.path.join(os.path.dirname(file), "..", "dev", "modelo_final_ganador.pth")
+PATH_PESOS = os.path.join(os.path.dirname(__file__), "..", "dev", "modelo_final_ganador.pth")
 
 #Verificar si los pesos existen antes de romper la app
 if not os.path.exists(PATH_PESOS):
