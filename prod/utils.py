@@ -6,7 +6,6 @@ from torchvision import transforms
 from PIL import Image
 import streamlit as st
 
-# 1. Parámetros idénticos a los usados en validación/test del entrenamiento
 IMG_SIZE = 224
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD = [0.229, 0.224, 0.225]
@@ -18,7 +17,7 @@ CONTENEDORES_NAMES = {
     3: "MARRÓN (Textil especial)"
 }
 
-# 2. Carga del modelo cacheada (Exigencia obligatoria del profesor)
+# Carga del modelo cacheada
 @st.cache_resource
 def cargar_modelo(path_pesos):
     # Instanciamos la arquitectura limpia
@@ -29,22 +28,26 @@ def cargar_modelo(path_pesos):
     in_features = model.classifier[1].in_features
     model.classifier[1] = nn.Linear(in_features=in_features, out_features=4)
     
-    # Cargamos los pesos entrenados (forzamos CPU por compatibilidad con el servidor web)
-    model.load_state_dict(torch.save if hasattr(torch, 'weights_only') else torch.load(path_pesos, map_location=torch.device('cpu')))
+    # CORRECCIÓN: Carga limpia con manejo de compatibilidad para weights_only de PyTorch
+    try:
+        state_dict = torch.load(path_pesos, map_location=torch.device('cpu'), weights_only=True)
+    except TypeError:
+        state_dict = torch.load(path_pesos, map_location=torch.device('cpu'))
+        
+    model.load_state_dict(state_dict)
     model.eval()
     return model
 
-# 3. Preprocesamiento idéntico (Evita que el modelo se rompa silenciosamente)
+# Preprocesamiento idéntico
 def preprocesar_imagen(image):
     transform_pipeline = transforms.Compose([
         transforms.Resize((IMG_SIZE, IMG_SIZE)),
         transforms.ToTensor(),
         transforms.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD)
     ])
-    # Convertimos a RGB por seguridad y agregamos dimensión de batch (B=1, C, H, W)
     return transform_pipeline(image.convert("RGB")).unsqueeze(0)
 
-# 4. Flujo de Inferencia
+# Flujo de Inferencia
 def predecir(model, tensor_imagen):
     with torch.no_grad():
         outputs = model(tensor_imagen)
