@@ -11,3 +11,7 @@ La descarga automática y extracción de la estructura del dataset se realiza di
 ## Link del dataset, alojado públicamente en la plataforma Kaggle.
 
 https://www.kaggle.com/datasets/farzadnekouei/trash-type-image-dataset
+
+## Abrir consola y ejecutar: 
+python -m pip install pandas numpy torch torchvision scikit-learn matplotlib seaborn pillow tqdm
+python -m pip install gdown

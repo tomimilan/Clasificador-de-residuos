@@ -1,13 +1,7 @@
-# Ignorar imágenes binarias grandes
 data/raw/
-data/processed/
+*.zip
 *.jpg
 *.jpeg
 *.png
-*.zip
-
-# Ignorar archivos del sistema y entornos virtuales
-venv/
-.venv/
 __pycache__/
 .ipynb_checkpoints/
