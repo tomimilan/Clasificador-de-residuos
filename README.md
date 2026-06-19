@@ -12,7 +12,14 @@ La descarga automática y extracción de la estructura del dataset se realiza di
 
 https://www.kaggle.com/datasets/farzadnekouei/trash-type-image-dataset
 
-## Abrir consola y ejecutar: 
+## Antes de clonar: Abrir consola y ejecutar: 
 python -m pip install pandas numpy torch torchvision scikit-learn matplotlib seaborn pillow tqdm
 
 python -m pip install gdown
+
+## Luego de instalar dependencias:
+git clone url
+
+
+## Luego de clonar proyecto:
+Abrir consola, navegar hasta raíz del proyecto y ejecutar: python dev/proyecto.py
