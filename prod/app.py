@@ -7,7 +7,7 @@ from utils import cargar_modelo, preprocesar_imagen, predecir
 st.set_page_config(page_title="Clasificador GIRSU Mendoza", layout="centered")
 
 st.title("♻️ Clasificador de Residuos Urbanos")
-st.write("Proyecto automatizado bajo los lineamientos de la Ley Provincial 5.961 (GIRSU Mendoza).")
+st.write("Proyecto automatizado bajo los lineamientos de la Ley Provincial 5.961")
 
 # CORRECCIÓN: Uso de __file__ con doble guion bajo reglamentario
 PATH_PESOS = os.path.join(os.path.dirname(__file__), "..", "dev", "modelo_final_ganador.pth")
