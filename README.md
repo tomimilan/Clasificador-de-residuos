@@ -14,4 +14,5 @@ https://www.kaggle.com/datasets/farzadnekouei/trash-type-image-dataset
 
 ## Abrir consola y ejecutar: 
 python -m pip install pandas numpy torch torchvision scikit-learn matplotlib seaborn pillow tqdm
+
 python -m pip install gdown
