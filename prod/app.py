@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # Carga segura del modelo (Cacheada vía utils)
-PATH_PESOS = os.path.join(os.path.dirname(_file_), "..", "dev", "modelo_final_ganador.pth")
+PATH_PESOS = os.path.join(os.path.dirname(__file__), "..", "dev", "modelo_final_ganador.pth")
 
 # 2. PANEL LATERAL (SIDEBAR) - Mejora UX/UI
 with st.sidebar:
