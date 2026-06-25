@@ -10,7 +10,6 @@ IMG_SIZE = 224
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD = [0.229, 0.224, 0.225]
 
-# Etiquetas limpias y unificadas con el script de desarrollo
 CONTENEDORES_NAMES = {
     0: "VERDE (Secos reciclables)",
     1: "NEGRO (Húmedos rechazo, comida, basura)",
@@ -18,39 +17,107 @@ CONTENEDORES_NAMES = {
     3: "MARRÓN (Textil especial)"
 }
 
-# Diccionario de Metadatos Educativos extraído de la vista para mantener el código limpio
+# Base de datos educativa integrada (Abstracción de Datos)
 DETALLES_CONTENEDORES = {
     "VERDE": {
-        "descripcion": "Materiales secos que pueden reingresar al circuito productivo gracias a los recuperadores urbanos.",
-        "ley": "Ley 9659 (GIRSU): Su separación es el pilar de la Economía Circular en la provincia, evitando que recursos útiles se entierren.",
-        "bolsa": "Bolsa transparente o verde. Siempre limpios y secos.",
-        "ejemplos": "Cartón, botellas plásticas, frascos de vidrio, latas de aluminio, papel de diario.",
-        "puntos": ["Punto Limpio Capital (Plaza Independencia)", "Punto Limpio Godoy Cruz (Parque Benegas)"],
-        "coords": [[-32.8894, -68.8451], [-32.9342, -68.8491]]
+        "descripcion": "Materiales secos y limpios aptos para reciclaje mecánico o valorización material.",
+        "ley": "Ley 9.659 (GIRSU Mendoza): Reintroducción de recursos al sistema económico mediante cooperativas de recuperadores urbanos.",
+        "bolsa": "Bolsa transparente o verde. El material debe ingresarse completamente limpio y seco.",
+        "ejemplos": "Cajas de cartón, botellas plásticas de gaseosa, envases de vidrio, latas de conserva, papel blanco."
     },
     "NEGRO": {
-        "descripcion": "Residuos orgánicos o húmedos que no pueden ser recuperados y tienen como destino el relleno sanitario.",
-        "ley": "Ley 5961: Su correcta disposición evita la proliferación de vectores y reduce las emisiones de gas metano a cielo abierto.",
-        "bolsa": "Bolsa negra o gris común de residuos.",
-        "ejemplos": "Restos de comida, cáscaras de fruta, yerba, pañales, servilletas usadas, cerámicos rotos.",
-        "puntos": ["Recolección domiciliaria nocturna según cronograma municipal"],
-        "coords": [[-32.8900, -68.8300]]  
+        "descripcion": "Residuos húmedos, restos biológicos o materiales compuestos no recuperables.",
+        "ley": "Ley Provincial 5.961: Disposición final controlada para mitigar la emanación de lixiviados y gases de efecto invernadero.",
+        "bolsa": "Bolsa negra o gris estándar de residuos domiciliarios.",
+        "ejemplos": "Restos de comida, cáscaras de frutas, yerba mate, pañales desechables, servilletas usadas, tazas rotas."
     },
     "AMARILLO": {
-        "descripcion": "Residuos de Aparatos Eléctricos y Electrónicos (RAEE) y componentes con metales pesados.",
-        "ley": "Normativa de Residuos Peligrosos: Contienen plomo y mercurio que contaminan de forma irreversible las napas de agua si van a un basural común.",
-        "bolsa": "Disposición en caja o bolsa cerrada especial, llevar directamente al centro de recepción. ¡No sacar a la vereda!",
-        "ejemplos": "Pilas, baterías de celular, cargadores rotos, mouses, teclados, tubos fluorescentes.",
-        "puntos": ["Punto Limpio RAEE Guaymallén", "Punto Especial Maipú Municipio"],
-        "coords": [[-32.8952, -68.8101], [-32.9721, -68.7905]]
+        "descripcion": "Residuos de Aparatos Eléctricos y Electrónicos (RAEE) y componentes con presencia de metales pesados.",
+        "ley": "Reglamento de Residuos Peligrosos: Prohibición de descarte en la vía pública por riesgo de contaminación de acuíferos.",
+        "bolsa": "Caja de cartón o bolsa hermética aislada. Traslado obligatorio por parte del ciudadano al centro de acopio.",
+        "ejemplos": "Pilas AA/AAA, baterías de litio, cables, cargadores dañados, periféricos informáticos, lámparas en desuso."
     },
     "MARRÓN": {
-        "descripcion": "Fracción textil en desuso que requiere un procesamiento de acopio o donación.",
-        "ley": "Enfoque Sustentable: Mitiga el impacto de la industria textil, una de las actividades con mayor huella hídrica a nivel global.",
-        "bolsa": "Bolsa cerrada para proteger los materiales de la humedad.",
-        "ejemplos": "Ropa vieja, calzado gastado, sábanas, retazos de tela, alfombras.",
-        "puntos": ["Centros de acopio textil municipales", "Contenedores especiales de cooperativas aliadas"],
-        "coords": [[-32.9100, -68.8400]]
+        "descripcion": "Fracción de descartes textiles, calzado e indumentaria en desuso.",
+        "ley": "Estrategia de Economía Circular: Mitigación del impacto del modelo 'Fast Fashion' y fomento de la donación o supra-reciclaje.",
+        "bolsa": "Bolsa plástica cerrada de manera hermética para evitar el ingreso de humedad ambiente.",
+        "ejemplos": "Ropa en desuso, zapatos gastados, sábanas viejas, retazos textiles de costura, mantas."
+    }
+}
+
+# MOTOR DE GEORREFERENCIACIÓN INTELIGENTE (Cruza de variables Municipio x Categoría)
+PUNTOS_GEOLOCALIZADOS = {
+    "Capital": {
+        "VERDE": [
+            {"name": "Punto Verde Plaza Independencia", "lat": -32.8895, "lon": -68.8448, "tipo": "Papel, Cartón, Plásticos y Vidrio"},
+            {"name": "Contenedor Reciclaje Parque Central", "lat": -32.8732, "lon": -68.8420, "tipo": "Secos Limpios Solamente"}
+        ],
+        "AMARILLO": [
+            {"name": "Centro RAEE Municipalidad de Capital", "lat": -32.8970, "lon": -68.8425, "tipo": "Pilas, Baterías y Pequeños Electrodomésticos"}
+        ],
+        "MARRÓN": [
+            {"name": "Punto Textil Paseo Pellegrini", "lat": -32.8930, "lon": -68.8510, "tipo": "Ropa y Calzado para Donación/Acopio"}
+        ]
+    },
+    "Godoy Cruz": {
+        "VERDE": [
+            {"name": "Punto Limpio Central Parque Benegas", "lat": -32.9345, "lon": -68.8488, "tipo": "Cartón, PET, Aluminio y Envases"},
+            {"name": "Estación Verde Plaza Godoy Cruz", "lat": -32.9252, "lon": -68.8415, "tipo": "Clasificación Completa de Secos"}
+        ],
+        "AMARILLO": [
+            {"name": "Contenedor RAEE Hiper Libertad", "lat": -32.9230, "lon": -68.8610, "tipo": "Pilas Usadas y Componentes Electrónicos"}
+        ],
+        "MARRÓN": [
+            {"name": "Planta Industrial Cruz Textil (Acopio)", "lat": -32.9150, "lon": -68.8450, "tipo": "Recuperación e Hilado Textil"}
+        ]
+    },
+    "Guaymallén": {
+        "VERDE": [
+            {"name": "Punto Limpio Cultural Espacio Le Parc", "lat": -32.8960, "lon": -68.8105, "tipo": "Materiales Reciclables Limpios"},
+            {"name": "Estación de Reciclaje Plaza Belgrano", "lat": -32.9110, "lon": -68.7950, "tipo": "Plásticos, Vidrios y Metales"}
+        ],
+        "AMARILLO": [
+            {"name": "Depósito RAEE Municipalidad de Guaymallén", "lat": -32.9180, "lon": -68.8120, "tipo": "Residuos Tecnológicos y Pilas"}
+        ],
+        "MARRÓN": [
+            {"name": "Punto Verde Textil Dorrego", "lat": -32.9100, "lon": -68.8250, "tipo": "Recopilación de Telas e Indumentaria"}
+        ]
+    },
+    "Luján de Cuyo": {
+        "VERDE": [
+            {"name": "Punto Verde Plaza Departamental Luján", "lat": -33.0355, "lon": -68.8795, "tipo": "Cartón, Vidrio, Plásticos y Latas"},
+            {"name": "Estación de Reciclaje Chacras de Coria", "lat": -33.0040, "lon": -68.8720, "tipo": "Materiales Secos Seleccionados"}
+        ],
+        "AMARILLO": [
+            {"name": "Centro RAEE Delegación Carrodilla", "lat": -32.9890, "lon": -68.8640, "tipo": "Pilas de Reloj, Baterías y Celulares Viejos"}
+        ],
+        "MARRÓN": [
+            {"name": "Centro Textil de Acopio Ugarteche", "lat": -33.1600, "lon": -68.8900, "tipo": "Ropa Usada y Retazos de Costura"}
+        ]
+    },
+    "Maipú": {
+        "VERDE": [
+            {"name": "Estación Verde Parque Metropolitano", "lat": -32.9780, "lon": -68.7890, "tipo": "Plásticos, Cartones e Insumos Secos"},
+            {"name": "Punto Limpio Plaza Departamental Maipú", "lat": -32.9723, "lon": -68.7906, "tipo": "Vidrio y Envases Metálicos"}
+        ],
+        "AMARILLO": [
+            {"name": "Eco-Punto Polideportivo Juan Ribosqui", "lat": -32.9740, "lon": -68.7950, "tipo": "Pilas y Componentes de Computación"}
+        ],
+        "MARRÓN": [
+            {"name": "Centro de Acopio Coquimbito", "lat": -32.9650, "lon": -68.7550, "tipo": "Donaciones e Indumentaria en Desuso"}
+        ]
+    },
+    "Las Heras": {
+        "VERDE": [
+            {"name": "Punto Limpio Plaza Marcos Burgos", "lat": -32.8482, "lon": -68.8332, "tipo": "Papel, Cartón y Botellas PET"},
+            {"name": "Estación de Separación Parque de la Familia", "lat": -32.8590, "lon": -68.8450, "tipo": "Residuos Secos Autorizados"}
+        ],
+        "AMARILLO": [
+            {"name": "Centro RAEE Municipalidad de Las Heras", "lat": -32.8490, "lon": -68.8350, "tipo": "Dispositivos Electrónicos y Baterías de Plomo"}
+        ],
+        "MARRÓN": [
+            {"name": "Punto Textil Histórico El Plumerillo", "lat": -32.8350, "lon": -68.8120, "tipo": "Campañas de Donación e Indumentaria Textil"}
+        ]
     }
 }
 
