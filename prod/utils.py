@@ -10,25 +10,22 @@ IMG_SIZE = 224
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
 IMAGENET_STD = [0.229, 0.224, 0.225]
 
+# Etiquetas limpias y unificadas con el script de desarrollo
 CONTENEDORES_NAMES = {
     0: "VERDE (Secos reciclables)",
-    1: "NEGRO (Húmedos rechazo)",
+    1: "NEGRO (Húmedos rechazo, comida, basura)",
     2: "AMARILLO (Electrónicos rechazo parcial)",
     3: "MARRÓN (Textil especial)"
 }
 
-# Carga del modelo cacheada
 @st.cache_resource
 def cargar_modelo(path_pesos):
-    # Instanciamos la arquitectura limpia
     weights = EfficientNet_B0_Weights.DEFAULT
     model = models.efficientnet_b0(weights=weights)
     
-    # Modificamos el clasificador final para nuestras 4 clases
     in_features = model.classifier[1].in_features
     model.classifier[1] = nn.Linear(in_features=in_features, out_features=4)
     
-    # CORRECCIÓN: Carga limpia con manejo de compatibilidad para weights_only de PyTorch
     try:
         state_dict = torch.load(path_pesos, map_location=torch.device('cpu'), weights_only=True)
     except TypeError:
@@ -38,7 +35,6 @@ def cargar_modelo(path_pesos):
     model.eval()
     return model
 
-# Preprocesamiento idéntico
 def preprocesar_imagen(image):
     transform_pipeline = transforms.Compose([
         transforms.Resize((IMG_SIZE, IMG_SIZE)),
@@ -47,7 +43,6 @@ def preprocesar_imagen(image):
     ])
     return transform_pipeline(image.convert("RGB")).unsqueeze(0)
 
-# Flujo de Inferencia
 def predecir(model, tensor_imagen):
     with torch.no_grad():
         outputs = model(tensor_imagen)
