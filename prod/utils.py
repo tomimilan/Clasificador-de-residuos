@@ -18,6 +18,42 @@ CONTENEDORES_NAMES = {
     3: "MARRÓN (Textil especial)"
 }
 
+# Diccionario de Metadatos Educativos extraído de la vista para mantener el código limpio
+DETALLES_CONTENEDORES = {
+    "VERDE": {
+        "descripcion": "Materiales secos que pueden reingresar al circuito productivo gracias a los recuperadores urbanos.",
+        "ley": "Ley 9659 (GIRSU): Su separación es el pilar de la Economía Circular en la provincia, evitando que recursos útiles se entierren.",
+        "bolsa": "Bolsa transparente o verde. Siempre limpios y secos.",
+        "ejemplos": "Cartón, botellas plásticas, frascos de vidrio, latas de aluminio, papel de diario.",
+        "puntos": ["Punto Limpio Capital (Plaza Independencia)", "Punto Limpio Godoy Cruz (Parque Benegas)"],
+        "coords": [[-32.8894, -68.8451], [-32.9342, -68.8491]]
+    },
+    "NEGRO": {
+        "descripcion": "Residuos orgánicos o húmedos que no pueden ser recuperados y tienen como destino el relleno sanitario.",
+        "ley": "Ley 5961: Su correcta disposición evita la proliferación de vectores y reduce las emisiones de gas metano a cielo abierto.",
+        "bolsa": "Bolsa negra o gris común de residuos.",
+        "ejemplos": "Restos de comida, cáscaras de fruta, yerba, pañales, servilletas usadas, cerámicos rotos.",
+        "puntos": ["Recolección domiciliaria nocturna según cronograma municipal"],
+        "coords": [[-32.8900, -68.8300]]  
+    },
+    "AMARILLO": {
+        "descripcion": "Residuos de Aparatos Eléctricos y Electrónicos (RAEE) y componentes con metales pesados.",
+        "ley": "Normativa de Residuos Peligrosos: Contienen plomo y mercurio que contaminan de forma irreversible las napas de agua si van a un basural común.",
+        "bolsa": "Disposición en caja o bolsa cerrada especial, llevar directamente al centro de recepción. ¡No sacar a la vereda!",
+        "ejemplos": "Pilas, baterías de celular, cargadores rotos, mouses, teclados, tubos fluorescentes.",
+        "puntos": ["Punto Limpio RAEE Guaymallén", "Punto Especial Maipú Municipio"],
+        "coords": [[-32.8952, -68.8101], [-32.9721, -68.7905]]
+    },
+    "MARRÓN": {
+        "descripcion": "Fracción textil en desuso que requiere un procesamiento de acopio o donación.",
+        "ley": "Enfoque Sustentable: Mitiga el impacto de la industria textil, una de las actividades con mayor huella hídrica a nivel global.",
+        "bolsa": "Bolsa cerrada para proteger los materiales de la humedad.",
+        "ejemplos": "Ropa vieja, calzado gastado, sábanas, retazos de tela, alfombras.",
+        "puntos": ["Centros de acopio textil municipales", "Contenedores especiales de cooperativas aliadas"],
+        "coords": [[-32.9100, -68.8400]]
+    }
+}
+
 @st.cache_resource
 def cargar_modelo(path_pesos):
     weights = EfficientNet_B0_Weights.DEFAULT
