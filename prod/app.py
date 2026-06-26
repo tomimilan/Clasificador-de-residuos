@@ -24,7 +24,7 @@ PATH_PESOS = os.path.join(os.path.dirname(__file__), "..", "dev", "modelo_final_
 # 2. PANEL LATERAL (SIDEBAR) - CENTRALIZACIÓN DE ENTRADAS
 # ==============================================================================
 with st.sidebar:
-    st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Recycle_Symbol_%28Solid%29.svg/120px-Recycle_Symbol_%28Solid%29.svg.png", width=50)
+    
     st.title("⚙️ Configuración")
     st.write("Carga de muestras y contexto geográfico para la asistencia ciudadana.")
     
