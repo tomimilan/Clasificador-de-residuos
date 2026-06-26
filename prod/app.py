@@ -12,7 +12,7 @@ from utils import cargar_modelo, preprocesar_imagen, predecir, DETALLES_CONTENED
 
 # 1. CONFIGURACIÓN DE PÁGINA EN MODO ANCHO
 st.set_page_config(
-    page_title="GIRSU Mendoza - Inteligencia Artificial", 
+    page_title="Clasificador de residuos urbanos", 
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -26,7 +26,7 @@ PATH_PESOS = os.path.join(os.path.dirname(__file__), "..", "dev", "modelo_final_
 with st.sidebar:
     
     st.title("⚙️ Configuración")
-    st.write("Carga de muestras y contexto geográfico para la asistencia ciudadana.")
+    st.write("Carga de imágenes y puntos geográficos de interés")
     
     st.divider()
     
@@ -47,8 +47,8 @@ with st.sidebar:
 # ==============================================================================
 # 3. CUERPO PRINCIPAL - TABLERO DE CONTROL (DASHBOARD)
 # ==============================================================================
-st.title("♻️ Sistema Inteligente de Gestión de Residuos Urbanos")
-st.markdown("Plataforma de asistencia ciudadana impulsada por Aprendizaje Profundo (*Deep Learning*).")
+st.title("♻️ Sistema Inteligente de Clasificación de Residuos Urbanos")
+st.markdown("Plataforma de asistencia ciudadana para la clasificación de residuos")
 
 if not os.path.exists(PATH_PESOS):
     st.error(f"⚠️ No se encontraron los pesos del modelo en la ruta: {PATH_PESOS}")
@@ -62,7 +62,7 @@ if model:
 
     # --- PESTAÑA 2: GUÍA DIGITAL (Educativa) ---
     with tab_guia_girsu:
-        st.subheader("Manual Digital de Clasificación en Origen")
+        st.subheader("Clasificación de Contenedores")
         cols_guia = st.columns(4)
         col_icons = ["🟢", "⚫", "🟡", "🟤"]
         for i, (key, info) in enumerate(DETALLES_CONTENEDORES.items()):

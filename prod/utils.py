@@ -20,16 +20,16 @@ CONTENEDORES_NAMES = {
 # Base de datos educativa integrada (Abstracción de Datos)
 DETALLES_CONTENEDORES = {
     "VERDE": {
-        "descripcion": "Materiales secos y limpios aptos para reciclaje mecánico o valorización material.",
+        "descripcion": "Materiales aptos para reciclaje o valorización material.",
         "ley": "Ley 9.659 (GIRSU Mendoza): Reintroducción de recursos al sistema económico mediante cooperativas de recuperadores urbanos.",
         "bolsa": "Bolsa transparente o verde. El material debe ingresarse completamente limpio y seco.",
         "ejemplos": "Cajas de cartón, botellas plásticas de gaseosa, envases de vidrio, latas de conserva, papel blanco."
     },
     "NEGRO": {
-        "descripcion": "Residuos húmedos, restos biológicos o materiales compuestos no recuperables.",
+        "descripcion": "Residuos húmedos, restos biológicos/orgánicos o materiales compuestos no recuperables.",
         "ley": "Ley Provincial 5.961: Disposición final controlada para mitigar la emanación de lixiviados y gases de efecto invernadero.",
         "bolsa": "Bolsa negra o gris estándar de residuos domiciliarios.",
-        "ejemplos": "Restos de comida, cáscaras de frutas, yerba mate, pañales desechables, servilletas usadas, tazas rotas."
+        "ejemplos": "Restos de comida, cáscaras de frutas, yerba mate, basura en general."
     },
     "AMARILLO": {
         "descripcion": "Residuos de Aparatos Eléctricos y Electrónicos (RAEE) y componentes con presencia de metales pesados.",
