@@ -3,6 +3,11 @@ from PIL import Image
 import os
 import pandas as pd
 import pydeck as pdk  # Motor de mapas interactivos con tooltips avanzados
+import sys
+
+# SINCRO DE RUTAS: Forzamos a la nube a mirar adentro de /prod para encontrar sus módulos
+sys.path.append(os.path.dirname(__file__))
+
 from utils import cargar_modelo, preprocesar_imagen, predecir, DETALLES_CONTENEDORES, PUNTOS_GEOLOCALIZADOS
 
 # 1. CONFIGURACIÓN DE PÁGINA EN MODO ANCHO (Aprovechamiento horizontal del espacio)
@@ -20,7 +25,7 @@ PATH_PESOS = os.path.join(os.path.dirname(__file__), "..", "dev", "modelo_final_
 # ==============================================================================
 with st.sidebar:
     st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Recycle_Symbol_%28Solid%29.svg/120px-Recycle_Symbol_%28Solid%29.svg.png", width=50)
-    st.title("⚙️ Configuración")
+    st.title(" ⚙️ Configuración")
     st.write("Carga de muestras y contexto geográfico para la asistencia ciudadana.")
     
     st.divider()
@@ -33,7 +38,7 @@ with st.sidebar:
     
     st.divider()
     
-    # El cargador se mueve al lateral para limpiar la interfaz de visualización
+    # Cargador de archivos en el lateral
     uploaded_file = st.file_uploader("📸 Subí una foto del residuo:", type=["jpg", "jpeg", "png"])
     
     st.divider()
@@ -77,7 +82,7 @@ if model:
 
             with col_izq:
                 st.markdown("#### 📸 Muestra Recibida")
-                # Control estricto de tamaño de imagen (Ancho fijo para que no rompa la pantalla)
+                # Control de tamaño para que la imagen no rompa el diseño
                 st.image(image, caption="Captura del residuo urbano", width=280)
                 
                 st.markdown("#### 📊 Confianza del Modelo")
@@ -85,7 +90,7 @@ if model:
                     tensor_img = preprocesar_imagen(image)
                     clase_predicha, probabilidades = predecir(model, tensor_img)
 
-                # Desglose compacto de las salidas de la capa Softmax
+                # Desglose compacto de las probabilidades Softmax
                 for clase, prob in probabilidades.items():
                     nombre_corto = clase.split(" ")[0]
                     st.write(f"**{nombre_corto}**: {prob*100:.1f}%")
@@ -118,7 +123,7 @@ if model:
                     st.markdown(f"**💡 Ítems Comunes:** {meta['ejemplos']}")
 
                 with st.expander(f"🗺️ Centros de Disposición Disponibles en {municipio}", expanded=True):
-                    # Filtrado inteligente basado en el Municipio seleccionado y la Predicción de la IA
+                    # Filtrado inteligente basado en el Municipio y la Predicción de la IA
                     puntos_filtrados = PUNTOS_GEOLOCALIZADOS.get(municipio, {}).get(color_clave, [])
                     
                     if puntos_filtrados:
@@ -126,13 +131,13 @@ if model:
                         for p in puntos_filtrados:
                             st.write(f"📍 **{p['name']}** — *Trata:* {p['tipo']}")
                         
-                        # Conversión a DataFrame para alimentar a PyDeck
+                        # Conversión a DataFrame para PyDeck
                         df_mapa = pd.DataFrame(puntos_filtrados)
                         
-                        # Selección de paleta de colores para los nodos del mapa
+                        # Paleta RGB de marcadores según el contenedor
                         color_rgb = [40, 167, 69] if color_clave == "VERDE" else [50, 50, 50] if color_clave == "NEGRO" else [220, 53, 69] if color_clave == "AMARILLO" else [139, 69, 19]
                         
-                        # Configuración de la capa del mapa PyDeck con Tooltips Interactivos
+                        # Configuración del mapa PyDeck con Tooltips interactivos on-hover
                         layer = pdk.Layer(
                             "ScatterplotLayer",
                             df_mapa,
@@ -148,7 +153,7 @@ if model:
                             zoom=12
                         )
                         
-                        # Renderizado del mapa interactivo con Tooltip on Hover
+                        # Renderizado del mapa
                         st.pydeck_chart(pdk.Deck(
                             layers=[layer],
                             initial_view_state=view_state,
@@ -157,21 +162,14 @@ if model:
                         ))
                     else:
                         st.info(f"ℹ️ Para el contenedor {color_clave} en {municipio}, se aplica el esquema de recolección domiciliaria programada. No requiere traslado a un Punto Limpio fijo.")
-
-                    # INTEGRACIÓN ASSET ESPECÍFICO LUJÁN DE CUYO
-                    if municipio == "Luján de Cuyo" and color_clave == "VERDE":
-                        st.divider()
-                        st.markdown("#### 🗺️ Infografía Oficial de Luján de Cuyo")
-                        ruta_lujan = os.path.join(os.path.dirname(__file__), "puntos_verdes_lujan.jpg")
-                        if os.path.exists(ruta_lujan):
-                            st.image(ruta_lujan, caption="Red de Puntos Verdes del Municipio de Luján", use_column_width=True)
-                        else:
-                            st.caption("💡 Nota técnica: Guardá la imagen municipal como 'puntos_verdes_lujan.jpg' en la carpeta '/prod' para visualizar la infografía nativa.")
+                    
+                    st.divider()
+                    st.caption(f"👉 **Acción Ciudadana:** Acatá los días y horarios de recolección de {municipio} para mantener la higiene urbana.")
         else:
-            # Estado inicial/espera limpio
+            # Estado inicial limpio
             st.info("👈 Seleccioná tu municipio y cargá una fotografía desde el panel lateral izquierdo para iniciar el análisis inteligente.")
             
-            # Tarjetas de presentación de objetivos del sistema
+            # Tarjetas de presentación métricas del sistema
             c1, c2, c3 = st.columns(3)
             with c1:
                 st.metric(label="Objetivo Provincial", value="GIRSU 2026")
