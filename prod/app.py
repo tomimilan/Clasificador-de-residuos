@@ -10,7 +10,7 @@ sys.path.append(os.path.dirname(__file__))
 
 from utils import cargar_modelo, preprocesar_imagen, predecir, DETALLES_CONTENEDORES, PUNTOS_GEOLOCALIZADOS
 
-# 1. CONFIGURACIÓN DE PÁGINA EN MODO ANCHO (Aprovechamiento horizontal del espacio)
+# 1. CONFIGURACIÓN DE PÁGINA EN MODO ANCHO
 st.set_page_config(
     page_title="GIRSU Mendoza - Inteligencia Artificial", 
     layout="wide",
@@ -25,7 +25,7 @@ PATH_PESOS = os.path.join(os.path.dirname(__file__), "..", "dev", "modelo_final_
 # ==============================================================================
 with st.sidebar:
     st.image("https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Recycle_Symbol_%28Solid%29.svg/120px-Recycle_Symbol_%28Solid%29.svg.png", width=50)
-    st.title(" ⚙️ Configuración")
+    st.title("⚙️ Configuración")
     st.write("Carga de muestras y contexto geográfico para la asistencia ciudadana.")
     
     st.divider()
@@ -77,13 +77,13 @@ if model:
         if uploaded_file is not None:
             image = Image.open(uploaded_file)
             
-            # GRID DE COLUMNAS ASIMÉTRICAS (Evita el scroll vertical masivo)
-            col_izq, col_der = st.columns([1, 1.5])
+            # GRID DE COLUMNAS ASIMÉTRICAS
+            col_izq, col_der = st.columns([1, 1.6])
 
             with col_izq:
                 st.markdown("#### 📸 Muestra Recibida")
-                # Control de tamaño para que la imagen no rompa el diseño
-                st.image(image, caption="Captura del residuo urbano", width=280)
+                # CORRECCIÓN UX: Imagen reducida a un tamaño estético de 180px
+                st.image(image, caption="Muestra de residuo", width=180)
                 
                 st.markdown("#### 📊 Confianza del Modelo")
                 with st.spinner("Procesando descriptores con EfficientNet-B0..."):
@@ -103,15 +103,19 @@ if model:
                 if "NEGRO" in clase_predicha:
                     st.warning(f"**Contenedor Recomendado:** {clase_predicha}")
                     color_clave = "NEGRO"
+                    color_rgba = [50, 50, 50, 230]  # Gris oscuro/Negro
                 elif "VERDE" in clase_predicha:
                     st.success(f"**Contenedor Recomendado:** {clase_predicha}")
                     color_clave = "VERDE"
+                    color_rgba = [40, 167, 69, 230]  # Verde GIRSU
                 elif "AMARILLO" in clase_predicha:
                     st.error(f"**Contenedor Recomendado:** {clase_predicha}")
                     color_clave = "AMARILLO"
+                    color_rgba = [230, 126, 34, 230]  # Naranja/Amarillo Alerta
                 else:
                     st.info(f"**Contenedor Recomendado:** {clase_predicha}")
                     color_clave = "MARRÓN"
+                    color_rgba = [139, 69, 19, 230]  # Marrón Textil
 
                 meta = DETALLES_CONTENEDORES[color_clave]
 
@@ -131,19 +135,18 @@ if model:
                         for p in puntos_filtrados:
                             st.write(f"📍 **{p['name']}** — *Trata:* {p['tipo']}")
                         
-                        # Conversión a DataFrame para PyDeck
+                        # Conversión a DataFrame para alimentar a PyDeck
                         df_mapa = pd.DataFrame(puntos_filtrados)
                         
-                        # Paleta RGB de marcadores según el contenedor
-                        color_rgb = [40, 167, 69] if color_clave == "VERDE" else [50, 50, 50] if color_clave == "NEGRO" else [220, 53, 69] if color_clave == "AMARILLO" else [139, 69, 19]
-                        
-                        # Configuración del mapa PyDeck con Tooltips interactivos on-hover
+                        # CORRECCIÓN DEFINITIVA DE CAPA PYDECK: Sin dependencias de Mapbox y con puntos autoajustables
                         layer = pdk.Layer(
                             "ScatterplotLayer",
                             df_mapa,
                             get_position="[lon, lat]",
-                            get_color=f"{color_rgb} + [200]",
-                            get_radius=180,
+                            get_color=color_rgba,          # Lista nativa RGBA corregida
+                            get_radius=150,                # Radio base en metros
+                            radius_min_pixels=10,          # CORRECCIÓN: Hace que el punto sea siempre visible con o sin zoom
+                            radius_max_pixels=20,
                             pickable=True,
                         )
                         
@@ -153,12 +156,12 @@ if model:
                             zoom=12
                         )
                         
-                        # Renderizado del mapa
+                        # Renderizado del mapa open-source libre de tokens de Mapbox
                         st.pydeck_chart(pdk.Deck(
                             layers=[layer],
                             initial_view_state=view_state,
                             tooltip={"text": "🏢 Centro: {name}\n♻️ Operación: {tipo}"},
-                            map_style="mapbox://styles/mapbox/light-v9"
+                            map_style=None  # CORRECCIÓN: Evita el bloqueo por falta de Token comercial de Mapbox
                         ))
                     else:
                         st.info(f"ℹ️ Para el contenedor {color_clave} en {municipio}, se aplica el esquema de recolección domiciliaria programada. No requiere traslado a un Punto Limpio fijo.")
