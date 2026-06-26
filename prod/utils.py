@@ -45,80 +45,35 @@ DETALLES_CONTENEDORES = {
     }
 }
 
-# MOTOR DE GEORREFERENCIACIÓN INTELIGENTE (Cruza de variables Municipio x Categoría)
+# BASE DE DATOS GEOGRÁFICA UNIFICADA (Estructura plana por Departamento, Coordenadas exactas provistas)
 PUNTOS_GEOLOCALIZADOS = {
-    "Capital": {
-        "VERDE": [
-            {"name": "Punto Verde Plaza Independencia", "lat": -32.8895, "lon": -68.8448, "tipo": "Papel, Cartón, Plásticos y Vidrio"},
-            {"name": "Contenedor Reciclaje Parque Central", "lat": -32.8732, "lon": -68.8420, "tipo": "Secos Limpios Solamente"}
-        ],
-        "AMARILLO": [
-            {"name": "Centro RAEE Municipalidad de Capital", "lat": -32.8970, "lon": -68.8425, "tipo": "Pilas, Baterías y Pequeños Electrodomésticos"}
-        ],
-        "MARRÓN": [
-            {"name": "Punto Textil Paseo Pellegrini", "lat": -32.8930, "lon": -68.8510, "tipo": "Ropa y Calzado para Donación/Acopio"}
-        ]
-    },
-    "Godoy Cruz": {
-        "VERDE": [
-            {"name": "Punto Limpio Central Parque Benegas", "lat": -32.9345, "lon": -68.8488, "tipo": "Cartón, PET, Aluminio y Envases"},
-            {"name": "Estación Verde Plaza Godoy Cruz", "lat": -32.9252, "lon": -68.8415, "tipo": "Clasificación Completa de Secos"}
-        ],
-        "AMARILLO": [
-            {"name": "Contenedor RAEE Hiper Libertad", "lat": -32.9230, "lon": -68.8610, "tipo": "Pilas Usadas y Componentes Electrónicos"}
-        ],
-        "MARRÓN": [
-            {"name": "Planta Industrial Cruz Textil (Acopio)", "lat": -32.9150, "lon": -68.8450, "tipo": "Recuperación e Hilado Textil"}
-        ]
-    },
-    "Guaymallén": {
-        "VERDE": [
-            {"name": "Punto Limpio Cultural Espacio Le Parc", "lat": -32.8960, "lon": -68.8105, "tipo": "Materiales Reciclables Limpios"},
-            {"name": "Estación de Reciclaje Plaza Belgrano", "lat": -32.9110, "lon": -68.7950, "tipo": "Plásticos, Vidrios y Metales"}
-        ],
-        "AMARILLO": [
-            {"name": "Depósito RAEE Municipalidad de Guaymallén", "lat": -32.9180, "lon": -68.8120, "tipo": "Residuos Tecnológicos y Pilas"}
-        ],
-        "MARRÓN": [
-            {"name": "Punto Verde Textil Dorrego", "lat": -32.9100, "lon": -68.8250, "tipo": "Recopilación de Telas e Indumentaria"}
-        ]
-    },
-    "Luján de Cuyo": {
-        "VERDE": [
-            {"name": "Punto Verde Plaza Departamental Luján", "lat": -33.0355, "lon": -68.8795, "tipo": "Cartón, Vidrio, Plásticos y Latas"},
-            {"name": "Estación de Reciclaje Chacras de Coria", "lat": -33.0040, "lon": -68.8720, "tipo": "Materiales Secos Seleccionados"}
-        ],
-        "AMARILLO": [
-            {"name": "Centro RAEE Delegación Carrodilla", "lat": -32.9890, "lon": -68.8640, "tipo": "Pilas de Reloj, Baterías y Celulares Viejos"}
-        ],
-        "MARRÓN": [
-            {"name": "Centro Textil de Acopio Ugarteche", "lat": -33.1600, "lon": -68.8900, "tipo": "Ropa Usada y Retazos de Costura"}
-        ]
-    },
-    "Maipú": {
-        "VERDE": [
-            {"name": "Estación Verde Parque Metropolitano", "lat": -32.9780, "lon": -68.7890, "tipo": "Plásticos, Cartones e Insumos Secos"},
-            {"name": "Punto Limpio Plaza Departamental Maipú", "lat": -32.9723, "lon": -68.7906, "tipo": "Vidrio y Envases Metálicos"}
-        ],
-        "AMARILLO": [
-            {"name": "Eco-Punto Polideportivo Juan Ribosqui", "lat": -32.9740, "lon": -68.7950, "tipo": "Pilas y Componentes de Computación"}
-        ],
-        "MARRÓN": [
-            {"name": "Centro de Acopio Coquimbito", "lat": -32.9650, "lon": -68.7550, "tipo": "Donaciones e Indumentaria en Desuso"}
-        ]
-    },
-    "Las Heras": {
-        "VERDE": [
-            {"name": "Punto Limpio Plaza Marcos Burgos", "lat": -32.8482, "lon": -68.8332, "tipo": "Papel, Cartón y Botellas PET"},
-            {"name": "Estación de Separación Parque de la Familia", "lat": -32.8590, "lon": -68.8450, "tipo": "Residuos Secos Autorizados"}
-        ],
-        "AMARILLO": [
-            {"name": "Centro RAEE Municipalidad de Las Heras", "lat": -32.8490, "lon": -68.8350, "tipo": "Dispositivos Electrónicos y Baterías de Plomo"}
-        ],
-        "MARRÓN": [
-            {"name": "Punto Textil Histórico El Plumerillo", "lat": -32.8350, "lon": -68.8120, "tipo": "Campañas de Donación e Indumentaria Textil"}
-        ]
-    }
+    "Capital": [
+        {"name": "Plaza Independencia", "lat": -32.88940391700496, "lon": -68.8449077057134},
+        {"name": "Parque Central", "lat": -32.87444786375254, "lon": -68.84242724543873},
+        {"name": "Nave Cultural", "lat": -32.8781641182645, "lon": -68.83939499052592}
+    ],
+    "Godoy Cruz": [
+        {"name": "Parque Benegas", "lat": -32.95234372585135, "lon": -68.85310509236986},
+        {"name": "Plaza Godoy Cruz", "lat": -32.925101961991736, "lon": -68.8443104445004},
+        {"name": "Hiper Libertad", "lat": -32.92880615894723, "lon": -68.85649621935909}
+    ],
+    "Guaymallén": [
+        {"name": "Espacio Cultural Julio LeParc", "lat": -32.88750642688741, "lon": -68.81468678214},
+        {"name": "Municipalidad de Guaymallén", "lat": -32.89969978668092, "lon": -68.78799624771794}
+    ],
+    "Luján de Cuyo": [
+        {"name": "Centro Verde", "lat": -33.04947299728296, "lon": -68.87275918969102},
+        {"name": "Plaza Departamental de Luján de Cuyo", "lat": -33.03890620263929, "lon": -68.87979029236624}
+    ],
+    "Maipú": [
+        {"name": "Parque Metropolitano", "lat": -32.97421625974557, "lon": -68.80195966168651},
+        {"name": "Polideportivo Juan Ribosqui", "lat": -32.97653296673632, "lon": -68.79442797702758},
+        {"name": "ChangoMás", "lat": -32.978349370886235, "lon": -68.79748874449801}
+    ],
+    "Las Heras": [
+        {"name": "Polimeni", "lat": -32.8515251882089, "lon": -68.83946151821625},
+        {"name": "Parque Industrial", "lat": -32.81784874896546, "lon": -68.80444537334037}
+    ]
 }
 
 @st.cache_resource
