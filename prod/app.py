@@ -82,8 +82,8 @@ if model:
 
             with col_izq:
                 st.markdown("#### 📸 Muestra Recibida")
-                # CORRECCIÓN UX: Imagen reducida a un tamaño estético de 180px
-                st.image(image, caption="Muestra de residuo", width=180)
+                # CORRECCIÓN UX: Imagen optimizada a un tamaño bien pequeño (150px)
+                st.image(image, caption="Muestra de residuo", width=150)
                 
                 st.markdown("#### 📊 Confianza del Modelo")
                 with st.spinner("Procesando descriptores con EfficientNet-B0..."):
@@ -99,23 +99,19 @@ if model:
             with col_der:
                 st.markdown("#### 🎯 Veredicto de Clasificación")
                 
-                # Asignación semántica de componentes visuales por color de residuo
+                # Asignación semántica de componentes visuales por color de residuo detectado
                 if "NEGRO" in clase_predicha:
                     st.warning(f"**Contenedor Recomendado:** {clase_predicha}")
                     color_clave = "NEGRO"
-                    color_rgba = [50, 50, 50, 230]  # Gris oscuro/Negro
                 elif "VERDE" in clase_predicha:
                     st.success(f"**Contenedor Recomendado:** {clase_predicha}")
                     color_clave = "VERDE"
-                    color_rgba = [40, 167, 69, 230]  # Verde GIRSU
                 elif "AMARILLO" in clase_predicha:
                     st.error(f"**Contenedor Recomendado:** {clase_predicha}")
                     color_clave = "AMARILLO"
-                    color_rgba = [230, 126, 34, 230]  # Naranja/Amarillo Alerta
                 else:
                     st.info(f"**Contenedor Recomendado:** {clase_predicha}")
                     color_clave = "MARRÓN"
-                    color_rgba = [139, 69, 19, 230]  # Marrón Textil
 
                 meta = DETALLES_CONTENEDORES[color_clave]
 
@@ -126,26 +122,45 @@ if model:
                     st.markdown(f"**⚖️ Marco Legal:** {meta['ley']}")
                     st.markdown(f"**💡 Ítems Comunes:** {meta['ejemplos']}")
 
-                with st.expander(f"🗺️ Centros de Disposición Disponibles en {municipio}", expanded=True):
-                    # Filtrado inteligente basado en el Municipio y la Predicción de la IA
-                    puntos_filtrados = PUNTOS_GEOLOCALIZADOS.get(municipio, {}).get(color_clave, [])
+                with st.expander(f"🗺️ Guía de Puntos Verdes y Gestión de Residuos en {municipio}", expanded=True):
+                    st.write(f"Mapa general de la red ecológica de **{municipio}**. Pasar el mouse por encima de los puntos para ver detalles:")
                     
-                    if puntos_filtrados:
-                        st.write(f"Llevá estos residuos a los siguientes puntos habilitados en **{municipio}**:")
-                        for p in puntos_filtrados:
-                            st.write(f"📍 **{p['name']}** — *Trata:* {p['tipo']}")
+                    # CORRECCIÓN ARQUITECTÓNICA: Recopilar TODOS los puntos del departamento sin filtrar por la IA
+                    puntos_municipio = PUNTOS_GEOLOCALIZADOS.get(municipio, {})
+                    lista_total_puntos = []
+                    
+                    for tacho_cat, puntos in puntos_municipio.items():
+                        for p in puntos:
+                            # Asignamos el color RGBA correspondiente a la naturaleza real de cada punto
+                            if tacho_cat == "VERDE":
+                                p_color = [40, 167, 69, 230]
+                            elif tacho_cat == "AMARILLO":
+                                p_color = [230, 126, 34, 230]
+                            elif tacho_cat == "MARRÓN":
+                                p_color = [139, 69, 19, 230]
+                            else:
+                                p_color = [50, 50, 50, 230]
+                            
+                            lista_total_puntos.append({
+                                "name": p["name"],
+                                "lat": p["lat"],
+                                "lon": p["lon"],
+                                "tipo": p["tipo"],
+                                "categoria": tacho_cat,
+                                "color_rgb": p_color
+                            })
+                    
+                    if lista_total_puntos:
+                        df_mapa = pd.DataFrame(lista_total_puntos)
                         
-                        # Conversión a DataFrame para alimentar a PyDeck
-                        df_mapa = pd.DataFrame(puntos_filtrados)
-                        
-                        # CORRECCIÓN DEFINITIVA DE CAPA PYDECK: Sin dependencias de Mapbox y con puntos autoajustables
+                        # Capa PyDeck con asignación de color dinámica mapeada desde la columna 'color_rgb'
                         layer = pdk.Layer(
                             "ScatterplotLayer",
                             df_mapa,
                             get_position="[lon, lat]",
-                            get_color=color_rgba,          # Lista nativa RGBA corregida
-                            get_radius=150,                # Radio base en metros
-                            radius_min_pixels=10,          # CORRECCIÓN: Hace que el punto sea siempre visible con o sin zoom
+                            get_color="color_rgb",         # Lee la lista RGBA de cada fila individualmente
+                            get_radius=150,
+                            radius_min_pixels=10,
                             radius_max_pixels=20,
                             pickable=True,
                         )
@@ -156,18 +171,18 @@ if model:
                             zoom=12
                         )
                         
-                        # Renderizado del mapa open-source libre de tokens de Mapbox
+                        # Renderizado del mapa con Tooltip avanzado (Nombre, Categoría y Tipo de tratamiento)
                         st.pydeck_chart(pdk.Deck(
                             layers=[layer],
                             initial_view_state=view_state,
-                            tooltip={"text": "🏢 Centro: {name}\n♻️ Operación: {tipo}"},
-                            map_style=None  # CORRECCIÓN: Evita el bloqueo por falta de Token comercial de Mapbox
+                            tooltip={"text": "🏢 Centro: {name}\n♻️ Contenedor: {categoria}\n🔧 Recibe: {tipo}"},
+                            map_style=None
                         ))
                     else:
-                        st.info(f"ℹ️ Para el contenedor {color_clave} en {municipio}, se aplica el esquema de recolección domiciliaria programada. No requiere traslado a un Punto Limpio fijo.")
+                        st.info(f"ℹ️ El municipio de {municipio} procesa sus residuos mediante rutas de recolección móvil programada. No cuenta con estaciones fijas de transferencia en nuestra base de datos.")
                     
                     st.divider()
-                    st.caption(f"👉 **Acción Ciudadana:** Acatá los días y horarios de recolección de {municipio} para mantener la higiene urbana.")
+                    st.caption(f"👉 **Acción Ciudadana:** Respetá los cronogramas de recolección de {municipio} para colaborar con el medio ambiente.")
         else:
             # Estado inicial limpio
             st.info("👈 Seleccioná tu municipio y cargá una fotografía desde el panel lateral izquierdo para iniciar el análisis inteligente.")
