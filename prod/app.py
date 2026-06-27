@@ -173,7 +173,7 @@ if model:
             # Tarjetas de presentación métricas del sistema
             c1, c2, c3 = st.columns(3)
             with c1:
-                st.metric(label="Objetivo Provincial", value="GIRSU 2026")
+                st.metric(label="Objetivo Provincial", value="Ley 5961 y Ley GIRSU 9.659")
                 st.caption("Fomento de la separación de los residuos")
             with c2:
                 st.metric(label="Arquitectura Core", value="EfficientNet-B0")
