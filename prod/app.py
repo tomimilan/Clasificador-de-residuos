@@ -42,7 +42,7 @@ with st.sidebar:
     uploaded_file = st.file_uploader("📸 Subí una foto del residuo:", type=["jpg", "jpeg", "png"])
     
     st.divider()
-    st.caption("⚖️ Sistema alineado a la Ley Provincial 5.961 y Ley GIRSU 9.659 de Mendoza.")
+    st.caption("Sistema alineado a la Ley Provincial 5.961 y Ley GIRSU 9.659 de Mendoza.")
 
 # ==============================================================================
 # 3. CUERPO PRINCIPAL - TABLERO DE CONTROL (DASHBOARD)
@@ -69,8 +69,8 @@ if model:
             with cols_guia[i]:
                 st.markdown(f"### {col_icons[i]} Contenedor {key}")
                 st.caption(info["descripcion"])
-                st.markdown(f"**🛍️ Tipo de Bolsa:**\n*{info['bolsa']}*")
-                st.markdown(f"**💡 Ejemplos:**\n{info['ejemplos']}")
+                st.markdown(f"**Recomendación:**\n*{info['bolsa']}*")
+                st.markdown(f"**Ejemplos:**\n{info['ejemplos']}")
 
     # --- PESTAÑA 1: PARTE DE INFERENCIA OPERATIVA ---
     with tab_principal:
@@ -81,11 +81,11 @@ if model:
             col_izq, col_der = st.columns([1, 1.6])
 
             with col_izq:
-                st.markdown("#### 📸 Muestra Recibida")
+                st.markdown("#### Muestra Recibida")
                 # Imagen optimizada a tamaño bien pequeño y controlado
                 st.image(image, caption="Muestra de residuo", width=150)
                 
-                st.markdown("#### 📊 Confianza del Modelo")
+                st.markdown("#### Confianza del Modelo")
                 with st.spinner("Procesando descriptores con EfficientNet-B0..."):
                     tensor_img = preprocesar_imagen(image)
                     clase_predicha, probabilidades = predecir(model, tensor_img)
@@ -174,10 +174,11 @@ if model:
             c1, c2, c3 = st.columns(3)
             with c1:
                 st.metric(label="Objetivo Provincial", value="GIRSU 2026")
-                st.caption("Fomento de la separación en origen y erradicación de basurales a cielo abierto.")
+                st.caption("Fomento de la separación de los residuos")
             with c2:
                 st.metric(label="Arquitectura Core", value="EfficientNet-B0")
-                st.caption("Modelo de Red Neuronal Convolucional con Compound Scaling optimizado para inferencia rápida.")
+                st.caption("Modelo de Red Neuronal Convolucional ")
             with c3:
-                st.metric(label="Entorno de Inferencia", value="CPU Sincrónico")
-                st.caption("Carga diferida mediante memoria cacheada para mitigar la latencia web.")
+                st.metric(label="Accuracy del Modelo en Test", value="98.78%")
+                st.caption("Evaluado sobre dataset de residuos urbanos")
+            

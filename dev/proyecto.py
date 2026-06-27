@@ -274,7 +274,7 @@ for epoch in range(EPOCHS_FINAL):
 
     print(f"[{epoch+1}/{EPOCHS_FINAL}] Train Acc={train_acc*100:.2f}% | Val Acc={val_acc*100:.2f}%")
 
-    # CORREGIDO: Sangría estándar de 4 espacios y guardado físico en dev/
+    # guardado físico en dev/
     if val_acc > best_val_acc:
         best_val_acc = val_acc
         torch.save(model.state_dict(), "dev/modelo_final_ganador.pth")
